@@ -1,0 +1,45 @@
+{
+  "name": "axios-rest",
+  "version": "0.1.0",
+  "description": "A simple axios wrapper to make rest api call delightful",
+  "author": "Eldo Magan <magan.eldo@gmail.com>",
+  "main": "dist/axios-rest.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "NODE_ENV=production rollup -c",
+    "dev": "rollup -c -w",
+    "test": "node test/test.js",
+    "pretest": "npm run build"
+  },
+  "keywords": [
+    "axios",
+    "rest",
+    "api",
+    "restful",
+    "resource"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eldomagan/axios-rest.git"
+  },
+  "peerDependencies": {
+    "axios": "^0.18.0"
+  },
+  "devDependencies": {
+    "axios": "^0.18.0",
+    "babel-core": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "rollup": "^0.56.3",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-clean": "^1.0.0",
+    "rollup-plugin-commonjs": "^8.3.0",
+    "rollup-plugin-json": "^2.3.0",
+    "rollup-plugin-node-resolve": "^3.0.3",
+    "rollup-plugin-uglify": "^3.0.0"
+  }
+}
