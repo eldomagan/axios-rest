@@ -1,33 +1,58 @@
-export default function createRestApi (requestor, endpoint, isCollection = true) {
+/**
+ * Create api endpoint
+ *
+ * ```javascript
+ * // Create users collections endpoint
+ * const users = createCollectionEnpoint(requestor, 'users')
+ *
+ * // Fetch all users
+ * users()
+ * users.all()
+ * ```
+ *
+ * @param Requestor requestor
+ * @param String endpoint
+ * @param Boolean isCollection
+ */
+export default function createApiEndpoint (requestor, endpoint, isCollection = true) {
+  const _get = (params = null) => requestor.makeRequest('get', `/${endpoint}`, params)
+  const _post = (data) => requestor.makeRequest('post', `/${endpoint}`, data)
 
-  const _all = (params = null) => requestor.makeRequest('get', `/${endpoint}`, params)
-  const _find = (id, params = null) => requestor.makeRequest('get', `/${endpoint}/${id}`, params)
-  const _create = (data) => requestor.makeRequest('post', `/${endpoint}`, data)
-  const _update = (id, data) => requestor.makeRequest('put', `/${endpoint}/${id}`, data)
-  const _delete = (id) => requestor.makeRequest('delete', `/${endpoint}/${id}`)
-
-  const restApi = (params) => _all(params)
-
-  if (isCollection) {
-    restApi.all = _all
-    restApi.find = _find
-    restApi.create = _create
-    restApi.update = _update
-    restApi.delete = _delete
+  /**
+   *
+   * @param {*} params
+   */
+  const apiEndpoint = function (params = null) {
+    // calling endpoint() is equivalent to endpoint.all()
+    return _get(params)
   }
 
-  restApi.get = (params = null) => requestor.makeRequest('get', `/${endpoint}`, params)
-  restApi.post = (data = null) => requestor.makeRequest('post', `/${endpoint}`, data)
+  if (isCollection) {
+    apiEndpoint.all = _get
+    apiEndpoint.create = _post
+    apiEndpoint.find = (id, params = null) => requestor.makeRequest('get', `/${endpoint}/${id}`, params)
+    apiEndpoint.update = (id, data) => requestor.makeRequest('put', `/${endpoint}/${id}`, data)
+    apiEndpoint.delete = apiEndpoint.remove = (id) => requestor.makeRequest('delete', `/${endpoint}/${id}`)
+    apiEndpoint.one = (key) => (requestor, `${endpoint}/${key}`, false)
+  } else {
+    apiEndpoint.get = _get
+    apiEndpoint.post = _post
+    apiEndpoint.put = (data) => requestor.makeRequest('put', `/${endpoint}`, data)
+    apiEndpoint.delete = () => requestor.makeRequest('delete', `/${endpoint}`, data)
+  }
 
-  const restApiProxy = new Proxy(restApi, {
-    get (api, prop) {
-      if (prop in api) {
-        return api[prop]
+  // Wrap the endpoint with a proxy to handle undefined property as another api endpoint
+  // undefined property on collection endpoint return entity endpoint
+  // and collection endpoint on entity endpoint
+  const apiEndpointProxy  = new Proxy(apiEndpoint, {
+    get (apiEndpoint, property) {
+      if (property in apiEndpoint) {
+        return apiEndpoint[property]
       }
 
-      return createRestApi(requestor, `${endpoint}/${prop}`, !isCollection)
+      return createApiEndpoint (requestor, `${endpoint}/${property}`, !isCollection)
     }
   })
 
-  return restApiProxy
+  return apiEndpointProxy
 }

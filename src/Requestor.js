@@ -1,21 +1,25 @@
 import axios from 'axios'
-import createRestApi from './restapi'
+import createApiEndpoint from './restapi'
 
 const inRange = (value, min, max) => value >= min && value <= max
 
 export default class Requestor {
-  constructor ({baseUrl}) {
+  constructor (config) {
     this.apiCache = {}
-    this.baseUrl = baseUrl
+    this.baseUrl = config.baseUrl
+    this.options = {}
+    this.currentRequestOptions = {}
     this.requestTransformers = []
     this.responseTransformers = []
 
-    this.axios = axios.create({
-      baseURL: baseUrl,
+    const axiosConfig = Object.assign({
+      baseURL: this.baseUrl,
       headers: {
         'Accept': 'application/json'
       }
-    })
+    }, config)
+
+    this.axios = axios.create(axiosConfig)
   }
 
   /**
@@ -28,21 +32,21 @@ export default class Requestor {
   }
 
   /**
-   * Create RestApi proxy
+   * Create collection endpoint
    *
    * @param String endpoint
    * @param String name
    *
    * @return Proxy[RestApi]
    */
-  api (endpoint, name) {
+  endpoint (endpoint, name) {
     const cacheKey = name || endpoint
 
     if (this.apiCache[cacheKey]) {
       return this.apiCache[cacheKey]
     }
 
-    const api = createRestApi(this, endpoint)
+    const api = createApiEndpoint(this, endpoint)
 
     this.apiCache[cacheKey] = api
 
