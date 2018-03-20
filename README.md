@@ -23,7 +23,7 @@ api.users.create({
 # Installation
 
 ```bash
-npm install --save axios-rest
+npm install --save axios-rest-client
 ```
 
 axios-rest require axios to work, so you have to install axios
@@ -34,12 +34,12 @@ npm install --save axios
 
 # How to use it ?
 
-Create your axios rest
+Create your axios rest client
 
 ```javascript
 const axiosRest require('axios-rest')
 
-const api = axiosRest({
+const api = axiosRestClient({
   baseUrl: process.env.API_BASE_URL // this is required
   // see axios for other configuration options
 })
