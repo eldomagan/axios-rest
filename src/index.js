@@ -8,7 +8,7 @@ export default function axiosRest(config) {
   const requestor = new Requestor(config)
   const apiProxy = new Proxy(requestor, {
     get (requestor, property) {
-      return property in requestor ? requestor[attr] : requestor.endpoint(property)
+      return property in requestor ? requestor[property] : requestor.endpoint(property)
     }
   })
 

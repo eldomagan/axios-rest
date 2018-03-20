@@ -1,6 +1,6 @@
 {
-  "name": "axios-rest",
-  "version": "0.1.4",
+  "name": "axios-rest-client",
+  "version": "0.1.0",
   "description": "A simple axios wrapper to make rest api call delightful",
   "author": "Eldo Magan <magan.eldo@gmail.com>",
   "main": "dist/axios-rest.js",
