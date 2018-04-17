@@ -19,7 +19,7 @@ export default class Requestor {
       }
     }, config)
 
-    this.axios = axios.create(axiosConfig)
+    this._axios = axios.create(axiosConfig)
   }
 
   /**
@@ -28,7 +28,7 @@ export default class Requestor {
    * @return Axios
    */
   axios () {
-    return this.axios
+    return this._axios
   }
 
   /**
@@ -51,6 +51,17 @@ export default class Requestor {
     this.apiCache[cacheKey] = api
 
     return api
+  }
+
+  /**
+   * Create some endpoint
+   *
+   * @param {*} endpoints
+   */
+  endpoints (endpoints) {
+    for (let name in endpoints) {
+      this.endpoint(endpoints[name], name)
+    }
   }
 
   /**
@@ -83,7 +94,7 @@ export default class Requestor {
 
 
     try {
-      const response = await this.axios.request(requestConfig)
+      const response = await this._axios.request(requestConfig)
       return this.transformResponse(response)
     } catch (error) {
       if (error.response) {
@@ -94,30 +105,8 @@ export default class Requestor {
     }
   }
 
-  wrapAxiosResponse (axiosResponse) {
-    const wrappedResponse = {
-      status: axiosResponse.status,
-      statusText: axiosResponse.statusText,
-      config: axiosResponse.config,
-      headers: axiosResponse.headers,
-      data: axiosResponse.data
-    }
-
-    wrappedResponse.isOk = wrappedResponse.status == 200
-    wrappedResponse.isCreated = wrappedResponse.status == 201
-    wrappedResponse.isBadRequest = wrappedResponse.status == 400
-    wrappedResponse.isForbidden = wrappedResponse.status == 403
-    wrappedResponse.isNotFound = wrappedResponse.status == 404
-    wrappedResponse.isServerError = wrappedResponse.status == 500
-
-    wrappedResponse.isSuccessful = inRange(wrappedResponse.status, 200, 299)
-    wrappedResponse.isClientError = inRange(wrappedResponse.status, 400, 499)
-
-    return wrappedResponse
-  }
-
   transformResponse (response) {
-    const wrappedResponse = this.wrapAxiosResponse(response)
+    const wrappedResponse = this._wrapAxiosResponse(response)
 
     // Run request tranformers
     if (this.responseTransformers.length) {
@@ -137,5 +126,28 @@ export default class Requestor {
     this.responseTransformers.push(transformer)
 
     return this
+  }
+
+  _wrapAxiosResponse (axiosResponse) {
+    const wrappedResponse = {
+      status: axiosResponse.status,
+      statusText: axiosResponse.statusText,
+      config: axiosResponse.config,
+      headers: axiosResponse.headers,
+      data: axiosResponse.data
+    }
+
+    wrappedResponse.isOk = wrappedResponse.status == 200
+    wrappedResponse.isCreated = wrappedResponse.status == 201
+    wrappedResponse.isBadRequest = wrappedResponse.status == 400
+    wrappedResponse.isForbidden = wrappedResponse.status == 403
+    wrappedResponse.isNotFound = wrappedResponse.status == 404
+    wrappedResponse.isServerError = wrappedResponse.status == 500
+
+    wrappedResponse.isSuccessful = inRange(wrappedResponse.status, 200, 299)
+    wrappedResponse.isClientError = inRange(wrappedResponse.status, 400, 499)
+    wrappedResponse.isServerError = inRange(wrappedResponse.status, 500, 599)
+
+    return wrappedResponse
   }
 }

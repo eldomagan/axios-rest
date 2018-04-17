@@ -4,8 +4,8 @@ A simple axios wrapper to make rest api call delightful.
 # Example
 
 ```javascript
-const axiosRest = require('axios-rest')
-const api = axiosRest({baseUrl: API_BASE_URL})
+const axiosRest = require('axios-rest-client')
+const api = axiosRest({baseUrl: process.env.API_BASE_URL})
 
 // Get all users
 api.users.all().then(response => {
@@ -37,7 +37,7 @@ npm install --save axios
 Create your axios rest client
 
 ```javascript
-const axiosRest require('axios-rest')
+const axiosRest require('axios-rest-client')
 
 const api = axiosRestClient({
   baseUrl: process.env.API_BASE_URL // this is required
@@ -47,15 +47,24 @@ const api = axiosRestClient({
 
 And that all ! You can start requesting your api
 
-Start by creating endpoint for your collections
+Start by creating endpoint for your resources
 
 ```javascript
+// Create multiple resources endpoints
+api.endpoints({
+  users: 'users',           // /users endpoint
+  posts: 'post-resources'  // /post-resources endpoint
+})
+
 api.endpoint('users')   // Create /users endpoint
-// or simply do
-api.users               // to get the /users endpoint automatically created for you
+
+// You can access previously endpoint as attribute
+// If the endpoint does not exist it will be created automatically
+api.users
+api.comments    // get endpoint for comments on /comments
 ```
 
-You can the call
+You can then call
 
 ```javascript
 api.users.all()               // GET /users

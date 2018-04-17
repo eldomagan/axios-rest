@@ -1,16 +1,18 @@
 import Requestor from './Requestor'
 
-export default function axiosRest(config) {
+function axiosRestClient(config) {
   if (!config.baseUrl) {
     throw new Error('config.baseUrl is required')
   }
 
   const requestor = new Requestor(config)
   const apiProxy = new Proxy(requestor, {
-    get (requestor, property) {
-      return property in requestor ? requestor[property] : requestor.endpoint(property)
+    get (requestor, prop) {
+      return prop in requestor ? requestor[prop] : requestor.endpoint(prop)
     }
   })
 
   return apiProxy
 }
+
+export default axiosRestClient
