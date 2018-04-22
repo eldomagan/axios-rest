@@ -39,14 +39,14 @@ export default class Requestor {
    *
    * @return Proxy[RestApi]
    */
-  endpoint (endpoint, name) {
-    const cacheKey = name || endpoint
+  endpoint (endpoint, name, isCollection = true) {
+    const cacheKey = name || endpoint.replace(/\//g, '_')
 
     if (this.apiCache[cacheKey]) {
       return this.apiCache[cacheKey]
     }
 
-    const api = createApiEndpoint(this, endpoint)
+    const api = createApiEndpoint(this, endpoint, isCollection)
 
     this.apiCache[cacheKey] = api
 

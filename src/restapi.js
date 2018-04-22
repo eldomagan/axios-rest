@@ -33,7 +33,7 @@ export default function createApiEndpoint (requestor, endpoint, isCollection = t
     apiEndpoint.find = (id, params = null) => requestor.makeRequest('get', `/${endpoint}/${id}`, params)
     apiEndpoint.update = (id, data) => requestor.makeRequest('put', `/${endpoint}/${id}`, data)
     apiEndpoint.delete = apiEndpoint.remove = (id) => requestor.makeRequest('delete', `/${endpoint}/${id}`)
-    apiEndpoint.one = (key) => (requestor, `${endpoint}/${key}`, false)
+    apiEndpoint.one = (key) => requestor.endpoint(`${endpoint}/${key}`, `${endpoint}_${key}`, false)
   } else {
     apiEndpoint.get = _get
     apiEndpoint.post = _post
@@ -45,12 +45,12 @@ export default function createApiEndpoint (requestor, endpoint, isCollection = t
   // undefined property on collection endpoint return entity endpoint
   // and collection endpoint on entity endpoint
   const apiEndpointProxy  = new Proxy(apiEndpoint, {
-    get (apiEndpoint, property) {
-      if (property in apiEndpoint) {
-        return apiEndpoint[property]
+    get (apiEndpoint, prop) {
+      if (prop in apiEndpoint) {
+        return apiEndpoint[prop]
       }
 
-      return createApiEndpoint (requestor, `${endpoint}/${property}`, !isCollection)
+      return requestor.endpoint(`${endpoint}/${prop}`, `${endpoint}_${prop}`, !isCollection)
     }
   })
 
