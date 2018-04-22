@@ -4,8 +4,8 @@ A simple axios wrapper to make rest api call delightful.
 # Example
 
 ```javascript
-const axiosRest = require('axios-rest-client')
-const api = axiosRest({baseUrl: process.env.API_BASE_URL})
+const axiosRestClient = require('axios-rest-client')
+const api = axiosRestClient({baseUrl: process.env.API_BASE_URL})
 
 // Get all users
 api.users.all().then(response => {
@@ -37,7 +37,7 @@ npm install --save axios
 Create your axios rest client
 
 ```javascript
-const axiosRest require('axios-rest-client')
+const axiosRestClient = require('axios-rest-client')
 
 const api = axiosRestClient({
   baseUrl: process.env.API_BASE_URL // this is required
