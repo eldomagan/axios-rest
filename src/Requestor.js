@@ -32,6 +32,27 @@ export default class Requestor {
   }
 
   /**
+   * Set request header for all requests
+   *
+   * @param {String} header
+   * @param {String} value
+   */
+  setHeader (header, value) {
+    this._axios.defaults.headers.common[header] = value
+  }
+
+  /**
+   * Set multiple request headers
+   *
+   * @param {Object} headers
+   */
+  setHeaders (headers) {
+    for (let header in headers) {
+      this.setHeader(header, headers[header])
+    }
+  }
+
+  /**
    * Create collection endpoint
    *
    * @param String endpoint
