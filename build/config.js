@@ -64,7 +64,7 @@ function genConfig (opts) {
     },
 
     output: {
-      name: 'axios-rest-client',
+      name: 'axiosRestClient',
       file: opts.file,
       format: opts.format
     }
