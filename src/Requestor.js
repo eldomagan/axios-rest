@@ -108,8 +108,8 @@ export default class Requestor {
 
     // Run request transformers
     if (this.requestTransformers.length) {
-      this.requestTransformers.forEach(transformer => {
-        transformer(requestConfig)
+      this.requestTransformers.forEach(transform => {
+        transform(requestConfig)
       })
     }
 
@@ -143,7 +143,7 @@ export default class Requestor {
     return this
   }
 
-  addRequestTransformer (transformer) {
+  addResponseTransformer (transformer) {
     this.responseTransformers.push(transformer)
 
     return this
