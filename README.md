@@ -67,7 +67,7 @@ api.comments    // get endpoint for comments on /comments
 You can then call
 
 ```javascript
-api.users.all()               // GET /users
+api.users.all(filter)         // GET /users, optionally filter
 api.users.find(1)             // Get /users/1
 api.users.create(data)        // POST /users, body=data
 api.users.update(1, data)     // PUT /users/1, body=data
