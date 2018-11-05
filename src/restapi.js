@@ -38,7 +38,7 @@ export default function createApiEndpoint (requestor, endpoint, isCollection = t
     apiEndpoint.get = _get
     apiEndpoint.post = _post
     apiEndpoint.put = (data) => requestor.makeRequest('put', `/${endpoint}`, data)
-    apiEndpoint.delete = () => requestor.makeRequest('delete', `/${endpoint}`, data)
+    apiEndpoint.delete = () => requestor.makeRequest('delete', `/${endpoint}`)
   }
 
   // Wrap the endpoint with a proxy to handle undefined property as another api endpoint
