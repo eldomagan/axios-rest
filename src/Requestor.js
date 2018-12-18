@@ -38,7 +38,7 @@ export default class Requestor {
    * @param {String} value
    */
   setHeader (header, value) {
-    this._axios.defaults.headers.common[header] = value
+    this._axios.defaults.headers[header] = value
   }
 
   /**
