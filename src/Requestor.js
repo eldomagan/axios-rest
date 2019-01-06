@@ -7,6 +7,7 @@ export default class Requestor {
   constructor (config) {
     this.apiCache = {}
     this.baseUrl = config.baseUrl
+    this.headers = config.headers || []
     this.options = {}
     this.currentRequestOptions = {}
     this.requestTransformers = []
@@ -20,6 +21,9 @@ export default class Requestor {
     }, config)
 
     this._axios = axios.create(axiosConfig)
+    if (this.headers.length > 0) {
+      this.setHeaders(this.headers)
+    }
   }
 
   /**
